@@ -9,21 +9,47 @@ public class Forum {
     ArrayList<ForumPost> posts = new ArrayList<ForumPost>();
     ArrayList<User> users = new ArrayList<User>();
 
-    public void deleteUser(User deletedUser) throws UserDoesNotExistException {
-        if(isUser(deletedUser)) {
+    public void deleteUser(int userId) throws UserDoesNotExistException {
+        User deletedUser = getUser(userId);
+        if(deletedUser != null) {
             users.remove(deletedUser);
         }
         else {
             throw new UserDoesNotExistException("user does not exist");
         }
     }
-    public boolean isUser(User estUser) {
+    public User getUser(int userId) {
         for(User user : users) {
-            if(user.equals(estUser)) {
+            if(user.id == userId) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public void addPost(ForumPost forumPost) throws UserDoesNotExistException {
+        User user = getUser(forumPost.getUserID());
+        if(user != null) {
+            posts.add(forumPost);
+        }
+        else {
+            throw new UserDoesNotExistException("user does not exist");
+        }
+    }
+
+    public boolean postExists(ForumPost forumPost) {
+        for(ForumPost post : posts) {
+            if(post.equals(forumPost)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void viewForum() {
+        for(ForumPost post : posts) {
+            System.out.println(post.toString());
+        }
     }
 
     class User{
