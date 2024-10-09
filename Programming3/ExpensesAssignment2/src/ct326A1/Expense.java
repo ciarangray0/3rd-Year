@@ -24,14 +24,14 @@ public class Expense {
      * @throws InvalidDateException if the provided date is in the future
      */
     public Expense(LocalDate date, String description, ExpenseCategory category, Money amount) throws InvalidDateException {
-        if (date.isAfter(LocalDate.now())) {
+        if (date.isAfter(LocalDate.now())) { //throw exception if date is in the past
             throw new InvalidDateException("Date cannot be in the future");
         } else {
             this.date = date;
             this.amount = amount;
             this.description = description;
             this.category = category;
-            this.approved = false;  // Default: unapproved
+            this.approved = false;  //default: unapproved
         }
     }
     /**

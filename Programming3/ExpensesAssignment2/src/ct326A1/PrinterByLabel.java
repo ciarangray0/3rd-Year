@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class PrinterByLabel implements ExpensePrinter {
 
     /**
+     * Overrides the print method from {@code ExpensePrinter} interface
      * Prints the list of expenses organized by their categories.
      *
      * @param expenses the list of expenses to print
