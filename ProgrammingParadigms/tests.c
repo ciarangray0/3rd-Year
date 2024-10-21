@@ -27,21 +27,31 @@ void runTests(){
   traverse(l);
 
    printf("\n");
+   printf("\n");
+   printf("testing stack \n");
+   printf("\n");
+   listElement* stack = createEl("test stack element (1).", 30);
   //test pushing a new value to head of the list
-  push(&l, "new head of list", 30);
-  traverse(l);
-
+  push(&stack, "pushing onto stack (2)", 30);
+  traverse(stack);
   printf("\n");
-  listElement* poppedElement = pop(&l);
-
-  printf("popping list element: %s", getData(poppedElement));
-
   printf("\n");
-  traverse(l);
+  
+  push(&stack, "pushing onto stack (3)", 30);
+  traverse(stack);
+  printf("\n");
+  printf("\n");
+
+  listElement* poppedElement = pop(&stack);
+  printf("popping list element: %p", getData(poppedElement));
+  printf("\n");
+  printf("\n");
+  traverse(stack);
   printf("\n");
   printf("\n");
 
   //create the queue
+   printf("testing queue \n");
   listElement* queue = createEl("first queue string", 30);
   traverse(queue);
   printf("\n");
@@ -60,7 +70,7 @@ void runTests(){
   printf("\n");
 
   listElement* dequeuedElement = dequeue(queue);
-  printf("dequeuing list element: %s\n", getData(dequeuedElement));
+  printf("dequeuing list element: %p\n", getData(dequeuedElement));
 
   printf("\n");
   traverse(queue);

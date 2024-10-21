@@ -4,33 +4,33 @@
 #include "linkedList-1.h"
 
 typedef struct listElementStruct{
-  char* data;
+  void* data;
   size_t size;
   struct listElementStruct* next;
 } listElement;
 
 //Creates a new linked list element with given content of size
 //Returns a pointer to the element
-listElement* createEl(char* data, size_t size){
+listElement* createEl(void* data, size_t size){
   listElement* e = malloc(sizeof(listElement));
   if(e == NULL){
     //malloc has had an error
     return NULL; //return NULL to indicate an error.
   }
-  char* dataPointer = malloc(sizeof(char)*size);
+  void* dataPointer = malloc(size);
   if(dataPointer == NULL){
     //malloc has had an error
     free(e); //release the previously allocated memory
     return NULL; //return NULL to indicate an error.
   }
-  strcpy(dataPointer, data);
+  memcpy(dataPointer, data, size);
   e->data = dataPointer;
   e->size = size;
   e->next = NULL;
   return e;
 }
 
-char* getData(listElement* element) {
+void* getData(listElement* element) {
   return element->data;
 }
 
@@ -38,14 +38,14 @@ char* getData(listElement* element) {
 void traverse(listElement* start){
   listElement* current = start;
   while(current != NULL){
-    printf("%s\n", current->data);
+    printf("%p\n", current->data);
     current = current->next;
   }
 }
 
 //Inserts a new element after the given el
 //Returns the pointer to the new element
-listElement* insertAfter(listElement* el, char* data, size_t size){
+listElement* insertAfter(listElement* el, void* data, size_t size){
   listElement* newEl = createEl(data, size);
   listElement* next = el->next;
   newEl->next = next;
@@ -63,7 +63,7 @@ int length(listElement* list) {
   return counter;
 }
 
-void push(listElement** list, char* data, size_t size) {
+void push(listElement** list, void* data, size_t size) {
   listElement* newElement = createEl(data, size);
   if(!newElement) {
     return;
@@ -95,7 +95,7 @@ void deleteAfter(listElement* after){
 }
 
 
-void enqueue(listElement** list, char* data, size_t size) {
+void enqueue(listElement** list, void* data, size_t size) {
   listElement* newElement = createEl(data, size);
     if (newElement == NULL) {
         return;
