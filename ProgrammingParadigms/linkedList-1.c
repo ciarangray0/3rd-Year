@@ -7,26 +7,49 @@ typedef struct listElementStruct{
   void* data;
   size_t size;
   struct listElementStruct* next;
+  void (*pf)(void* data);
 } listElement;
+
+void printString(void* data) { //print a string 
+  printf("%s\n", (char*)data);
+}
+
+void printInt(void* data) { //print an integer
+  printf("%d\n", *(int*)data);
+}
+
+void printChar(void* data) { //print a character
+  printf("%c\n", *(char*)data);
+}
+
+void printFloat(void* data) {
+    printf("%f\n", *(float*)data);  //print a float
+}
+
+void printDouble(void* data) {
+    printf("%lf\n", *(double*)data);  //print a double
+}
+
 
 //Creates a new linked list element with given content of size
 //Returns a pointer to the element
-listElement* createEl(void* data, size_t size){
+listElement* createEl(void* data, size_t size, void (*pf)(void*)){
   listElement* e = malloc(sizeof(listElement));
   if(e == NULL){
     //malloc has had an error
     return NULL; //return NULL to indicate an error.
   }
-  void* dataPointer = malloc(size);
+  void* dataPointer = malloc(size); //just allocate the ammount of memory given in the size parameter
   if(dataPointer == NULL){
     //malloc has had an error
     free(e); //release the previously allocated memory
     return NULL; //return NULL to indicate an error.
   }
-  memcpy(dataPointer, data, size);
+  memcpy(dataPointer, data, size); //use memcpy instead of strcpy
   e->data = dataPointer;
   e->size = size;
   e->next = NULL;
+  e->pf = pf; //set the elements correct print function
   return e;
 }
 
@@ -38,15 +61,15 @@ void* getData(listElement* element) {
 void traverse(listElement* start){
   listElement* current = start;
   while(current != NULL){
-    printf("%p\n", current->data);
+    current->pf(current->data); //call the element's print function
     current = current->next;
   }
 }
 
 //Inserts a new element after the given el
 //Returns the pointer to the new element
-listElement* insertAfter(listElement* el, void* data, size_t size){
-  listElement* newEl = createEl(data, size);
+listElement* insertAfter(listElement* el, void* data, size_t size, void (*pf)(void*)){
+  listElement* newEl = createEl(data, size, pf);
   listElement* next = el->next;
   newEl->next = next;
   el->next = newEl;
@@ -54,17 +77,17 @@ listElement* insertAfter(listElement* el, void* data, size_t size){
 }
 
 int length(listElement* list) {
-  int counter = 0;
+  int counter = 0; //to count number of elements
   listElement* current = list;
-  while(current!= NULL){
+  while(current!= NULL){ //loop until theres no elements
     current = current->next;
-    counter++;
+    counter++; //update counter
   }
   return counter;
 }
 
-void push(listElement** list, void* data, size_t size) {
-  listElement* newElement = createEl(data, size);
+void push(listElement** list, void* data, size_t size, void (*pf)(void*)) {
+  listElement* newElement = createEl(data, size, pf);
   if(!newElement) {
     return;
   }
@@ -79,7 +102,6 @@ listElement* pop(listElement** list) {
   listElement* newHead = (*list)->next;
   listElement* temp = *list;
   *list = newHead;
-    
     return temp;
 }
 
@@ -95,17 +117,17 @@ void deleteAfter(listElement* after){
 }
 
 
-void enqueue(listElement** list, void* data, size_t size) {
-  listElement* newElement = createEl(data, size);
+void enqueue(listElement** list, void* data, size_t size, void (*pf)(void*)) {
+  listElement* newElement = createEl(data, size, pf); //create new element
     if (newElement == NULL) {
-        return;
+        return; //handle element creation failure
     }
     if (*list == NULL) {
         *list = newElement; // if the list is empty, set the new element as the head of the list
         return;
     }
-    newElement->next = *list;
-    *list = newElement;
+    newElement->next = *list; //else, set the new elelements next pointer to the old head of the list
+    *list = newElement; //set new element to head of the list
 }
 
 listElement* dequeue(listElement* list) {
