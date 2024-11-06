@@ -48,14 +48,14 @@ public class UserAccount implements Comparable<UserAccount> {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) {
+        if(this == obj) { //return true if same objects are being compared
             return true;
         }
-        if(!(obj instanceof UserAccount)) {
+        if(!(obj instanceof UserAccount)) { //if the object is not an instance of userAccount return false
             return false;
         }
-        UserAccount other = (UserAccount) obj;
-        return this.userID == other.userID;
+        UserAccount other = (UserAccount) obj; //cast object to UserAccount
+        return this.userID == other.userID; //compare userId's
     }
 
     @Override

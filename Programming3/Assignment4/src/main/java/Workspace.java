@@ -1,4 +1,4 @@
-import java.util.List;
+import java.util.*;
 
 public class Workspace {
     private String workspaceName;
@@ -10,14 +10,25 @@ public class Workspace {
         this.workspaceName = workspaceName;
         this.workspaceDescription = workspaceDescription;
         this.owner = owner;
-    }
+        collaborators = new ArrayList<UserAccount>();
+        }
 
     public void addCollaborator(UserAccount user) {
+
         collaborators.add(user);
+    }
+
+    public List<UserAccount> getCollaborators() {
+        return collaborators;
     }
 
     @Override
     public String toString() {
-        return "";
+        String collaboratorsString = "";
+        for(UserAccount c : collaborators) {
+            collaboratorsString += c.getName();
+            collaboratorsString += ", ";
+        }
+        return String.format("\nWorkspace Name: %s, Collaborators: %s", workspaceName, collaboratorsString);
     }
 }

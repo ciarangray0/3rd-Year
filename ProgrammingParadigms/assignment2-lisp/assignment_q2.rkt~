@@ -1,0 +1,12 @@
+(define (ins_beg el1 l2)
+  (cons el1 l2))
+
+(define (ins_end el1 l2)
+  (append l2 (list el1))) ;add the singular element to a list and append it to the end of the list
+
+(define (count_top_level lst)
+  (if (null? lst)
+      0                           ;return count of 0 if the list is empty
+      (+ 1 (count_top_level (cdr lst)))))  ;increment the count and recurse on the cdr of the list
+
+
