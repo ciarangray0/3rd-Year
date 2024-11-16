@@ -25,7 +25,7 @@ public class UserAccountSerializationTest {
             }
         }
 
-        // Test if 10 users were loaded
+        //test array is correct length
         assertEquals(10, userAccounts.size());
     }
     @Test
@@ -38,7 +38,7 @@ public class UserAccountSerializationTest {
     @Test
     void testDeserializeFromJSON() {
         List<UserAccount> testUsers = UserAccountManager.loadUserAccountsFromCSV("/Users/ciarangray/Desktop/3rdYear/Assignments/Programming3/Assignment4/src/main/resources/users.csv");
-        UserAccountManager.serializeToJSON(testUsers, "testUsers.json");  // Serialize first
+        UserAccountManager.serializeToJSON(testUsers, "testUsers.json");  //serialize first
         List<UserAccount> deserializedUsers = UserAccountManager.deserializeFromJSON("testUsers.json");
         assertNotNull(deserializedUsers);
         assertEquals(testUsers.size(), deserializedUsers.size());

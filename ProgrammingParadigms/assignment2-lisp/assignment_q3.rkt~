@@ -1,13 +1,9 @@
 (define (traverse tree)
-  (if (null? tree) ; check if the tree is empty
-      '() ; return an empty list if empty
-      (if (not (pair? tree))
-          (list tree) ; if it's a leaf node, return it as a list
-          (append (traverse (if (pair? (car tree)) (car tree) '())) ; traverse left subtree if it exists
-                  (if (and (pair? tree) (pair? (cdr tree))) (list (cadr tree)) '()) ; visit the root node if it exists
-                  (traverse (if (and (pair? (cdr tree)) (pair? (cddr tree))) (caddr tree) '())))))) ; traverse right subtree if it exists
-
-
+  (if (null? tree) ;first check if tree is empty
+      '() ;return empty tree if empty
+      (append(traverse (car tree)) ;traverse the left side of the tree
+      (list (cadr tree)) ;visit the root node
+      (traverse (caddr tree))))) ;traverse the right subtree
 
 (define (search_tree tree value)
   (if (null? tree)
@@ -82,26 +78,7 @@
 
 
 ;; Test values
-
-(define tree1 '())
-
-;; Testing tree functionality
-(define (test-tree-functionality)
-  (set! tree1 (insert tree1 5)) ;insering to create tree1
-  (set! tree1 (insert tree1 6))
-  (set! tree1 (insert tree1 7))
-  (display "Basic tree: ")
-  (display (traverse tree1)) ;should print the in-order traversal
-  (newline)
-  (display "Add 8 to tree: ")
-  (set! tree1 (insert tree1 8)) ; Add 8 
-  (display (traverse tree1)) ; print after adding 8
-  (newline)
-  (display "Search for '5' in the tree (true/false): ")
-  (display (search_tree tree1 5)) ; Should print #t
-  (newline))
-
-(define test-list '(3 67 11 87 42 5 9 23))
+(define test-list '(34 7 23 32 5 42 1 12 8))
 
 ;; Testing ascending order
 (define (test-ascending)
@@ -121,12 +98,10 @@
   (display (higher_level_tree_sort test-list ascending-by-last-digit))
   (newline))
 
-;; Run tests
-(test-tree-functionality)
-(test-ascending)
-(test-descending)
-(test-ascending-by-last-digit)
 
+  (test-ascending)
+  (test-descending)
+  (test-ascending-by-last-digit)
 
 
 

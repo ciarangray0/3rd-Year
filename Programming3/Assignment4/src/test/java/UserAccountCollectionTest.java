@@ -5,19 +5,26 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for the UserAccount and Workspace functionality.
+ * Tests the loading of user accounts from a CSV file,
+ * natural ordering of user accounts, equality and hash code implementation,
+ * and adding users and assosiated workspaces to a hashmap.
+ */
 public class UserAccountCollectionTest {
     List<UserAccount> userAccountsTest;
     UserAccount u1 = new UserAccount(12345, "ciaran", "ciarangray0@gmail.com");
     Workspace workspace1;
     Workspace workspace2;
 
+    /**
+     * Sets up the test environment by loading user accounts from a CSV file
+     * and creating a sample workspace instance.
+     */
     @BeforeEach
     public void setUp() {
         userAccountsTest = new ArrayList<>(); //array to hold the users
@@ -37,6 +44,10 @@ public class UserAccountCollectionTest {
         workspace2 = new Workspace("Workspace B", "another new project for this workspace", u1);
     }
 
+    /**
+     * Tests if user accounts are correctly loaded from a CSV file.
+     * Verifies that 10 users are loaded, as there are 10 users in the csv file and checks that each user is not null.
+     */
     @Test
     public void testLoadUserAccountsFromCsv() throws IOException {
         List<UserAccount> userAccounts = new ArrayList<>();
@@ -59,6 +70,10 @@ public class UserAccountCollectionTest {
         }
     }
 
+    /**
+     * Tests the natural ordering of UserAccount instances by email.
+     * Sorts two users and checks that the list is sorted by natural order (email).
+     */
     @Test
     void testNaturalOrder() {
         //create two users, the first email address starts with 'f' and the second starts with 's' so firstUser should be registered first
@@ -68,12 +83,15 @@ public class UserAccountCollectionTest {
         //add seconduser first to avoid bias
         sortedUserTest.add(secondUser);
         sortedUserTest.add(firstUser);
+        System.out.println("\nUnsorted by natural order: \n");
         for (UserAccount u : sortedUserTest) {
             System.out.print(u);
+            System.out.println("\n");
         }
         assertEquals(secondUser, sortedUserTest.get(0)); //second user is first in list
         assertEquals(firstUser, sortedUserTest.get(1)); //first user is first
         Collections.sort(sortedUserTest); //sort them based on natural order (email address)
+        System.out.println("\nSorted by natural order: \n");
         for (UserAccount u : sortedUserTest) {
             System.out.print("\n" + u);
         }
@@ -81,6 +99,10 @@ public class UserAccountCollectionTest {
         assertEquals(secondUser, sortedUserTest.get(1));
     }
 
+    /**
+     * Tests the equality of UserAccount instances.
+     * Verifies that users with the same ID are considered equal.
+     */
     @Test
     void testUserAccountEquality() {
         //create 3 users, 2 have the same userID
@@ -94,6 +116,10 @@ public class UserAccountCollectionTest {
         assertNotEquals(u2, u3);
     }
 
+    /**
+     * Tests the hashCode method for UserAccount.
+     * Verifies that identical UserAccount instances have the same hash code.
+     */
     @Test
     void testHashCodeEquals() {
         //create two identical users
@@ -109,6 +135,9 @@ public class UserAccountCollectionTest {
         assertEquals(initialHashCode, user1.hashCode());
     }
 
+    /**
+     * Tests that two different UserAccount instances have different hash codes.
+     */
     @Test
     void testHashCodeDifference() {
         UserAccount user1 = new UserAccount(244552, "ciaran", "ciaran@example.com");
@@ -118,6 +147,9 @@ public class UserAccountCollectionTest {
         assertNotEquals(user1.hashCode(), user2.hashCode());
     }
 
+    /**
+     * Tests the toString method for UserAccount to ensure proper formatting.
+     */
     @Test
     void testFormattedToString() {
         UserAccount user1 = new UserAccount(244552, "ciaran", "ciaran@example.com");
@@ -125,6 +157,11 @@ public class UserAccountCollectionTest {
         assertEquals(user1.toString(), expectedOutput);
     }
 
+    /**
+     * Tests sorting the userAccounts list based on different criteria:
+     * natural order, UID, and name in descending order.
+     * Also, performs a binary search for a specific user.
+     */
     @Test
     void testSortedList() {
         List<UserAccount> userAccountsTest = new ArrayList<>(); //array to hold the users
@@ -200,9 +237,13 @@ public class UserAccountCollectionTest {
         if(position < 0) {
             userAccountsTest.add(-position-1, searchKey); //if user is not found add it to the list (best practice for using binary search)
         }
-        System.out.printf("\nSearching for position of user 'Linda garcia', expected index: 4, actual index: %d", position);
+        System.out.printf("\nSearching for position of user 'Linda garcia', expected index: 7, actual index: %d", position);
     }
 
+    /**
+     * Tests creating a new workspace and adding collaborators to it.
+     * Verifies that the workspace is created and collaborators are added.
+     */
     @Test
     public void testCreateWorkspace() {
         workspace1 = new Workspace("Project A", "new project for this workspace", u1);
@@ -213,19 +254,54 @@ public class UserAccountCollectionTest {
         assertEquals(10, workspace1.getCollaborators().size());
     }
 
+    /**
+     * Tests the toString method for a Workspace with no collaborators.
+     * Verifies that the output matches the expected string format.
+     */
     @Test
     void testToStringWithNoCollaborators() {
-        //when no collaborators are added, we expect "None" to appear in the output
+        //expected string when no collaborators are added
         String expected = "\nWorkspace Name: Workspace B, Collaborators: ";
         assertEquals(expected, workspace2.toString());
     }
 
+
+    /**
+     * Tests the toString method for a Workspace with multiple collaborators.
+     * Verifies that the output matches the expected string format with all collaborator names.
+     */
     @Test
     void testToStringWithMultipleCollaborators() {
         for (UserAccount u : userAccountsTest) {
-            workspace2.addCollaborator(u);
+            workspace2.addCollaborator(u); //add all users to this workspace
         }
-        String expected = "\nWorkspace Name: Workspace B, Collaborators: Tim Stewart, Jane Doe, John Smith, Sarah Johnson, Robert Brown, Emily White, Michael Davis, Linda Garcia, David Wilson, Susan Martinez, ";
+        String expected = "\nWorkspace Name: Workspace B, Collaborators: Ciaran Gray, Jane Doe, John Doe, Lionel Messi, Bob Duncan, Emily White, Michael Davis, Linda Garcia, Conor McGregor, Xians";
         assertEquals(expected, workspace2.toString());
+    }
+
+    /**
+     * Tests creating and storing workspaces for different users in a Map.
+     * Verifies that workspaces are correctly added and stored under each user.
+     */
+    @Test
+    void testUserAccountWorkspaceMap() {
+        Map<UserAccount, ArrayList<Workspace>> map = new HashMap<>();
+        //populate the map, add in an empty arraylist as the element for each key
+        for(int i = 0; i < 10; i++) {
+            map.put(userAccountsTest.get(i), new ArrayList<Workspace>());
+        }
+        //create a new workspace, with the user at position 0 in the map as the owner
+        Workspace user0Workspace = new Workspace("User 0's workSpace from map", "first workspace for user at postion 0", userAccountsTest.get(0)); //set the owner as user at position 0 in the list
+        //add collaborators
+        user0Workspace.addCollaborator(userAccountsTest.get(4));
+        user0Workspace.addCollaborator(userAccountsTest.get(7));
+        //retireive the workspace arraylist from user0
+        ArrayList<Workspace> user0WorkspaceArrayList = map.get(userAccountsTest.get(0));
+        //add the workspace to the array
+        user0WorkspaceArrayList.add(user0Workspace);
+        //update arraylist
+        map.put(userAccountsTest.get(0), user0WorkspaceArrayList);
+
+        System.out.println("\nUser 0's workspaces\n" + map.get(userAccountsTest.get(0)));
     }
 }
