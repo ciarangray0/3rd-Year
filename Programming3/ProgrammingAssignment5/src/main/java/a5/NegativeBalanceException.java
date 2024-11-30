@@ -1,3 +1,4 @@
+package a5;
 /**
  * An exception representing an instance where a negative balance is set to an
  account
